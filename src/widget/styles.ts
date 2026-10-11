@@ -6,6 +6,7 @@
  */
 
 const LIGHT = `
+  color-scheme: light;
   --fb-accent: var(--feedback-accent, #0969da);
   --fb-on-accent: var(--feedback-on-accent, #ffffff);
   --fb-fg: var(--feedback-fg, #1f2328);
@@ -21,6 +22,7 @@ const LIGHT = `
 `;
 
 const DARK = `
+  color-scheme: dark;
   --fb-accent: var(--feedback-accent, #4493f8);
   --fb-on-accent: var(--feedback-on-accent, #ffffff);
   --fb-fg: var(--feedback-fg, #f0f6fc);
