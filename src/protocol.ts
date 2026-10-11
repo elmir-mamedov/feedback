@@ -248,3 +248,17 @@ export async function readReportForm(form: FormData): Promise<Parsed> {
   );
   return parseReport({ ...body, images });
 }
+
+/**
+ * The report in a reportForm() request body, checked: for an app's own
+ * server, when its dialog sends reports there rather than to the relay.
+ */
+export async function readReportBody(body: Uint8Array | ArrayBuffer | string, contentType: string): Promise<Parsed> {
+  let form: FormData;
+  try {
+    form = await new Response(body as BodyInit, { headers: { "content-type": contentType } }).formData();
+  } catch {
+    return { ok: false, error: "The report is malformed." };
+  }
+  return readReportForm(form);
+}
