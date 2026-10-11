@@ -1,0 +1,15 @@
+{
+  "name": "feedback-relay",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@elmir-mamedov/feedback": "github:elmir-mamedov/feedback#v0.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.149.0"
+  }
+}
