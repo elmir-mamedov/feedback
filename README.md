@@ -66,7 +66,7 @@ updates** under Settings → Notifications → Email.
 ## Add the dialog to a web app
 
 ```bash
-npm install github:elmir-mamedov/feedback#v0.2.0
+npm install github:elmir-mamedov/feedback#v0.2.1
 ```
 
 ```ts
@@ -191,7 +191,7 @@ shows the home folder as `~`, so a report doesn't carry the account name.
 Install a tagged release, and that app stays on it until you choose to move:
 
 ```bash
-npm install github:elmir-mamedov/feedback#v0.2.0
+npm install github:elmir-mamedov/feedback#v0.2.1
 ```
 
 `package.json` records the tag and `package-lock.json` the exact commit, so a
