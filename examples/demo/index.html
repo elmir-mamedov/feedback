@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback widget demo</title>
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      body { margin: 0; padding: 32px; line-height: 1.5; }
+      main { max-width: 640px; }
+      button { font: inherit; padding: 6px 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Feedback widget demo</h1>
+      <p>
+        Run <code>npm run build</code>, serve the repo root (<code>npx serve .</code> or
+        <code>python3 -m http.server</code>) and open <code>/examples/demo/</code>. Nothing is sent anywhere:
+        reports are logged to the console.
+      </p>
+      <p>
+        <button type="button" id="open">Open from your own button</button>
+        <button type="button" id="crash">Throw an error</button>
+      </p>
+    </main>
+    <script type="module">
+      import { mountFeedback } from "../../dist/widget/index.js";
+
+      const params = new URLSearchParams(location.search);
+
+      const feedback = mountFeedback({
+        app: "demo",
+        appName: "Demo",
+        // ?theme=dark or ?theme=light to try a theme; the system's otherwise.
+        theme: params.get("theme") ?? "auto",
+        version: "1.0.0",
+        // A stand-in for the relay, so the demo works offline.
+        send: async (report) => {
+          console.log("report", report);
+          await new Promise((resolve) => setTimeout(resolve, 600));
+          return { status: "sent" };
+        },
+        facts: () => ({ Account: "demo-user" }),
+        extras: [{ label: "The last lines of the demo's log", load: () => ({ logs: "== demo.log ==\nready" }) }],
+      });
+
+      // ?open opens the dialog straight away.
+      if (params.has("open")) feedback.open();
+      document.getElementById("open").addEventListener("click", () => feedback.open({ kind: "idea" }));
+      document.getElementById("crash").addEventListener("click", () => {
+        setTimeout(() => {
+          throw new TypeError("demo is not a function");
+        });
+      });
+    </script>
+  </body>
+</html>
