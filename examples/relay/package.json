@@ -7,7 +7,7 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@elmir-mamedov/feedback": "github:elmir-mamedov/feedback#v0.1.0"
+    "@elmir-mamedov/feedback": "github:elmir-mamedov/feedback#v0.2.0"
   },
   "devDependencies": {
     "wrangler": "^4.149.0"

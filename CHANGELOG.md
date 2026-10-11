@@ -4,6 +4,13 @@ Each release, newest first. Versions follow [semver](https://semver.org). The
 protocol version is the report format's, in the URL reports are posted to;
 see "Versions" in the README.
 
+## 0.2.0 (2026-10-11)
+
+Protocol v1, unchanged: relays built from 0.1.0 serve this release too.
+
+- The widget's `version` option also takes a function, possibly async, asked
+  each time the dialog opens.
+
 ## 0.1.0 (2026-10-11)
 
 The first release, extracted from KB25's feedback feature. Protocol v1.

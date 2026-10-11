@@ -1,6 +1,6 @@
 {
   "name": "@elmir-mamedov/feedback",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A feedback dialog with screenshots for any web app, and a Cloudflare Worker that files what people send as issues in a private GitHub repo.",
   "license": "MIT",
   "author": "Elmir Mamedov",
