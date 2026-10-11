@@ -60,8 +60,11 @@ export interface FeedbackOptions {
    * through the app's own server (see readReportBody and createOutbox).
    */
   send?: (report: Report) => Promise<SendResult>;
-  /** The app's version, which goes with every report. */
-  version?: string;
+  /**
+   * The app's version, which goes with every report. A function is asked each
+   * time the dialog opens, for a page that has to look its version up.
+   */
+  version?: string | (() => string | null | undefined | Promise<string | null | undefined>);
   /** The kinds offered, in order; bug, idea and question unless set. They must match the relay's. */
   kinds?: KindOption[];
   /** Facts that always go with a report, loaded each time the dialog opens and shown before sending. */
@@ -233,6 +236,7 @@ export function mountFeedback(options: FeedbackOptions): FeedbackWidget {
   let images: { blob: Blob; url: string }[] = [];
   let sending = false;
   let appFacts: Facts = {};
+  let appVersion = typeof options.version === "string" ? options.version : undefined;
   let loading: Promise<void> = Promise.resolve();
 
   const kind = () => form.querySelector<HTMLInputElement>("input[name=kind]:checked")?.value ?? kinds[0].id;
@@ -272,7 +276,7 @@ export function mountFeedback(options: FeedbackOptions): FeedbackWidget {
   function renderPreview() {
     const { facts, errors: recent, logs } = details();
     const rows: [string, string][] = [];
-    if (options.version) rows.push([appName, options.version]);
+    if (appVersion) rows.push([appName, appVersion]);
     rows.push(...Object.entries(facts));
     const width = Math.max(...rows.map(([name]) => name.length)) + 2;
     const lines = rows.map(([name, value]) => name.padEnd(width) + value);
@@ -394,7 +398,7 @@ export function mountFeedback(options: FeedbackOptions): FeedbackWidget {
             data: new Uint8Array(await image.blob.arrayBuffer()),
           }))
         ),
-        version: options.version,
+        version: appVersion,
         ...details(),
       });
       if (!checked.ok) return setStatus(checked.error, true);
@@ -427,11 +431,14 @@ export function mountFeedback(options: FeedbackOptions): FeedbackWidget {
   /** Load what the app adds; the preview fills in as it arrives. */
   function load() {
     loading = (async () => {
-      const [facts, values] = await Promise.all([
+      const version = options.version;
+      const [facts, values, looked] = await Promise.all([
         attempt(options.facts),
         Promise.all(extraRows.map((row) => attempt(() => row.extra.load()))),
+        typeof version === "function" ? attempt(version) : undefined,
       ]);
       appFacts = facts ?? {};
+      if (typeof version === "function") appVersion = looked ?? undefined;
       extraRows.forEach((row, i) => {
         row.value = values[i] ?? null;
         row.label.hidden = !row.value;

@@ -120,7 +120,7 @@ on `:root` to match its colours. The font is the page's.
 | `appName`       | The app's name as people know it, used in the dialog's text. Required.                                          |
 | `relay`         | The relay's URL. Required unless `send` is given.                                                              |
 | `send`          | `(report) => Promise<SendResult>`: send some other way, such as through the app's own server.                  |
-| `version`       | The app's version, sent with every report.                                                                     |
+| `version`       | The app's version, sent with every report. A function, possibly async, is asked each time the dialog opens.     |
 | `kinds`         | `{ id, label, placeholder? }[]`; bug, idea and question unless set. The relay's `kinds` for the app must match. |
 | `facts`         | `() => Facts`, possibly async: facts that always go, shown before sending. Asked each time the dialog opens.   |
 | `extras`        | `{ label, checked?, load }[]`: things a person may tick, such as a log tail. `load` returns `{ facts?, logs? }` or nothing to hide the row. |

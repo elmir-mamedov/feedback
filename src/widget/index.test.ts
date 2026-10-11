@@ -174,6 +174,22 @@ test("a report carries what the person wrote and exactly what the preview showed
   assert.equal(sessionStorage.getItem("feedback.fitness.errors"), null, "sent errors aren't sent twice");
 });
 
+test("a version looked up when the dialog opens is previewed and sent", async () => {
+  const relay = recorder();
+  let version = "0.4.0";
+  widget = mountFeedback({ app: "kb25", appName: "KB25", send: relay.send, version: async () => version });
+  widget.open();
+  const p = parts();
+  await until(() => /^KB25 {2,}0\.4\.0$/m.test(p.preview.textContent!), "the version in the preview");
+  version = "0.4.1";
+  widget.close();
+  widget.open();
+  p.message.value = "Hello";
+  p.form.requestSubmit();
+  await until(() => relay.sent.length === 1, "the send");
+  assert.equal(relay.sent[0].version, "0.4.1");
+});
+
 test("the page's uncaught errors are kept, and can be left out", async () => {
   const relay = recorder();
   widget = mountFeedback({ app: "fitness", appName: "Fitness", send: relay.send });
