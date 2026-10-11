@@ -35,7 +35,7 @@ const DARK = `
   --fb-shadow: 0 16px 48px rgba(1, 4, 9, 0.6);
 `;
 
-export const STYLES = `
+export const STYLES: string = `
 :host {
   all: initial;
   ${LIGHT}
